@@ -40,9 +40,13 @@ st.dataframe([
 st.header("Tilmeld og afmeld")
 
 if eventList:
-    eventTitles = {event["id"]: event["title"] for event in eventList}
-    eventId = st.selectbox("Event", list(eventTitles), format_func=lambda id: eventTitles[id])
-    event = next(event for event in eventList if event["id"] == eventId)
+    eventTitle = st.selectbox("Event", [event["title"] for event in eventList])
+
+    for event in eventList:
+        if event["title"] == eventTitle:
+            break
+
+    eventId = event["id"]
     isFull = len(event["participants"]) >= event["capacity"]
 
     st.write("Deltagere:", ", ".join(event["participants"]))
