@@ -1,0 +1,101 @@
+{
+  "openapi": "3.0.3",
+  "info": {
+    "title": "Fredagsbar API",
+    "version": "1.0.0"
+  },
+  "servers": [
+    { "url": "http://localhost:5000" }
+  ],
+  "paths": {
+    "/events": {
+      "get": {
+        "summary": "Hent alle events",
+        "responses": {
+          "200": { "description": "Liste af events" }
+        }
+      },
+      "post": {
+        "summary": "Opret et event",
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "properties": {
+                  "title": { "type": "string" },
+                  "date": { "type": "string" },
+                  "capacity": { "type": "integer" }
+                }
+              }
+            }
+          }
+        },
+        "responses": {
+          "201": { "description": "Det nye event" },
+          "400": { "description": "title, date eller capacity mangler, eller capacity er ikke et positivt heltal" }
+        }
+      }
+    },
+    "/events/{id}": {
+      "parameters": [
+        { "name": "id", "in": "path", "required": true, "schema": { "type": "integer" } }
+      ],
+      "get": {
+        "summary": "Hent ét event",
+        "responses": {
+          "200": { "description": "Eventet" },
+          "404": { "description": "Eventet findes ikke" }
+        }
+      },
+      "delete": {
+        "summary": "Slet et event",
+        "responses": {
+          "204": { "description": "Eventet er slettet" },
+          "404": { "description": "Eventet findes ikke" }
+        }
+      }
+    },
+    "/events/{id}/signups": {
+      "parameters": [
+        { "name": "id", "in": "path", "required": true, "schema": { "type": "integer" } }
+      ],
+      "post": {
+        "summary": "Tilmeld en person",
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "properties": {
+                  "name": { "type": "string" }
+                }
+              }
+            }
+          }
+        },
+        "responses": {
+          "201": { "description": "Det opdaterede event" },
+          "400": { "description": "name mangler" },
+          "404": { "description": "Eventet findes ikke" },
+          "409": { "description": "Eventet er fuldt, eller personen er allerede tilmeldt" }
+        }
+      }
+    },
+    "/events/{id}/signups/{name}": {
+      "parameters": [
+        { "name": "id", "in": "path", "required": true, "schema": { "type": "integer" } },
+        { "name": "name", "in": "path", "required": true, "schema": { "type": "string" } }
+      ],
+      "delete": {
+        "summary": "Afmeld en person",
+        "responses": {
+          "204": { "description": "Personen er afmeldt" },
+          "404": { "description": "Eventet eller tilmeldingen findes ikke" }
+        }
+      }
+    }
+  }
+}
